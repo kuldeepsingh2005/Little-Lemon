@@ -1,0 +1,88 @@
+import React, { useState } from "react";
+
+const BookingForm = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    date: "",
+    time: "",
+    guests: 1,
+    occasion: "Birthday"
+  });
+
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Basic validation
+    if (!formData.name || !formData.date || !formData.time) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
+    // Here you'd usually send data to server
+    console.log("Form submitted:", formData);
+    setSubmitted(true);
+  };
+
+  return (
+    <div className="booking-container">
+      <h2>Book a Table at Little Lemon 🍋</h2>
+
+      {submitted ? (
+        <div>
+          <h3>Thanks for your booking, {formData.name}!</h3>
+          <p>We look forward to seeing you on {formData.date} at {formData.time}.</p>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <label>
+            Name:
+            <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+          </label>
+
+          <label>
+            Date:
+            <input type="date" name="date" value={formData.date} onChange={handleChange} required />
+          </label>
+
+          <label>
+            Time:
+            <select name="time" value={formData.time} onChange={handleChange} required>
+              <option value="">Select time</option>
+              <option value="18:00">6:00 PM</option>
+              <option value="19:00">7:00 PM</option>
+              <option value="20:00">8:00 PM</option>
+            </select>
+          </label>
+
+          <label>
+            Number of Guests:
+            <input type="number" name="guests" value={formData.guests} onChange={handleChange} min="1" max="10" />
+          </label>
+
+          <label>
+            Occasion:
+            <select name="occasion" value={formData.occasion} onChange={handleChange}>
+              <option value="Birthday">Birthday</option>
+              <option value="Anniversary">Anniversary</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+
+          <button type="submit">Book Table</button>
+        </form>
+      )}
+    </div>
+  );
+};
+
+export default BookingForm;
